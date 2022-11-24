@@ -62,7 +62,7 @@
             id: id
         };
 
-        fetch('/api/productos', {
+        fetch(`/api/productos/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

@@ -28,6 +28,9 @@ app.engine(
 const Productos = require("./clases/classProductos");
 const productos = new Productos("./data/productos.json");
 
+const Carrito = require("./clases/classCarrito");
+const carrito = new Carrito("./data/carrito.json");
+
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
 });
@@ -39,8 +42,10 @@ app.get("/", async (req, res) => {
   res.render("index");
 });
 
-//*********************USER****************************//
-const user = "admin";
+app.get("/*", async (req, res) => {
+  res.render("./partials/ops");
+}); //*********************USER****************************//
+const administrador = true;
 
 //*********************PRODUCTOS****************************//
 
@@ -50,13 +55,21 @@ routerProductos.get("/", async (req, res) => {
 });
 
 routerProductos.get("/add", async (req, res) => {
-  res.render("./productos/add");
+  if (administrador) {
+    res.render("./productos/add");
+  } else {
+    res.render("./partials/permissions");
+  }
 });
 
 routerProductos.get("/edit/:id", async (req, res) => {
-  const { id } = req.params;
-  const producto = await productos.getProducts(id);
-  res.render("./productos/edit", { products: producto });
+  if (administrador) {
+    const { id } = req.params;
+    const producto = await productos.getProducts(id);
+    res.render("./productos/edit", { products: producto });
+  } else {
+    res.render("./partials/permissions");
+  }
 });
 
 routerProductos.get("/:id", async (req, res) => {
@@ -65,10 +78,10 @@ routerProductos.get("/:id", async (req, res) => {
   res.render("./productos/view", { products: producto });
 });
 
-routerProductos.put("/", async (req, res) => {
-  if (user == "admin") {
+routerProductos.put("/:id", async (req, res) => {
+  if (administrador) {
     const { body } = req;
-    const { id } = req.body;
+    const { id } = req.params;
     const addProductos = await productos.editProducts(id, body);
     res.json("ok");
   } else {
@@ -77,7 +90,7 @@ routerProductos.put("/", async (req, res) => {
 });
 
 routerProductos.post("/", async (req, res) => {
-  if (user == "admin") {
+  if (administrador) {
     const { body } = req;
     const addProductos = await productos.saveProducts(body);
     res.json("ok");
@@ -86,9 +99,9 @@ routerProductos.post("/", async (req, res) => {
   }
 });
 
-routerProductos.delete("/", async (req, res) => {
-  if (user == "admin") {
-    const { id } = req.body;
+routerProductos.delete("/:id", async (req, res) => {
+  if (administrador) {
+    const { id } = req.params;
     const deletProducts = await productos.deleteProducts(id);
     res.json("ok");
   } else {
@@ -98,10 +111,73 @@ routerProductos.delete("/", async (req, res) => {
 
 //*********************CARRITO****************************//
 
-routerCarrito.get("/", async (req, res) => {});
+routerCarrito.get("/", async (req, res) => {
+  const carritos = await carrito.getAllCarritos();
+  res.render("./carrito/index", { carritos: carritos });
+});
 
-routerCarrito.put("/", async (req, res) => {});
+routerCarrito.get("/:id/productos", async (req, res) => {
+  const { id } = req.params;
+  const carritos = await carrito.getCarritos(id);
+  res.render("./carrito/view", {
+    carritos: carritos.productos,
+    id: carritos.id,
+  });
+});
 
-routerCarrito.post("/", async (req, res) => {});
+routerCarrito.get("/edit/:id", async (req, res) => {
+  const { id } = req.params;
+  const carritos = await carrito.getCarritos(id);
+  const products = await productos.getAllProducts();
+  if (administrador) {
+    res.render("./carrito/edit", {
+      carritos: carritos.productos,
+      id: carritos.id,
+      products: products,
+    });
+  } else {
+    res.render("./partials/permissions");
+  }
+});
 
-routerCarrito.delete("/", async (req, res) => {});
+routerCarrito.post("/", async (req, res) => {
+  const carritos = await carrito.nuevoCarrito();
+  const last = carritos[carritos.length - 1];
+  if (administrador) {
+    res.json(last.id + 1);
+  } else {
+    res.render("./partials/permissions");
+  }
+});
+
+routerCarrito.post("/:carritoId/productos", async (req, res) => {
+  const { id } = req.body;
+  const { carritoId } = req.params;
+  if (administrador) {
+    const carritos = await carrito.saveProducts(carritoId, id);
+    res.json("ok");
+  } else {
+    res.render("./partials/permissions");
+  }
+});
+
+routerCarrito.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  if (administrador) {
+    const deletCarritos = await carrito.deleteCarritos(id);
+    res.json("ok");
+  } else {
+    res.render("./partials/permissions");
+  }
+});
+
+routerCarrito.delete("/:carritoId/productos/:productoId", async (req, res) => {
+  const { productoId } = req.params;
+  const { carritoId } = req.params;
+  if (administrador) {
+    const deletCarritos = await carrito.deleteProducts(carritoId, productoId);
+    res.json("ok");
+  } else {
+    res.render("./partials/permissions");
+  }
+});
