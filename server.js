@@ -2,6 +2,7 @@ const express = require("express");
 const { Router } = express;
 const { engine } = require("express-handlebars");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 const app = express();
 const routerProductos = Router();
@@ -25,11 +26,11 @@ app.engine(
   })
 );
 
-const Productos = require("./clases/classProductos");
-const productos = new Productos("./data/productos.json");
+const ProductosDaoArchvos = require(`./daos/productos/Productos${process.env.INSTANCIA}`);
+const productos = new ProductosDaoArchvos(`${process.env.DATAPRODUCTOS}`);
 
-const Carrito = require("./clases/classCarrito");
-const carrito = new Carrito("./data/carrito.json");
+const CarritoDaoArchvos = require(`./daos/carritos/Carrito${process.env.INSTANCIA}`);
+const carrito = new CarritoDaoArchvos(`${process.env.DATACARRITO}`);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
@@ -102,7 +103,7 @@ routerProductos.post("/", async (req, res) => {
 routerProductos.delete("/:id", async (req, res) => {
   if (administrador) {
     const { id } = req.params;
-    const deletProducts = await productos.deleteProducts(id);
+    await productos.deleteProducts(id);
     res.json("ok");
   } else {
     res.render("./partials/permissions");
@@ -154,7 +155,7 @@ routerCarrito.post("/:carritoId/productos", async (req, res) => {
   const { id } = req.body;
   const { carritoId } = req.params;
   if (administrador) {
-    const carritos = await carrito.saveProducts(carritoId, id);
+    const carritos = await carrito.saveProduct(carritoId, id);
     res.json("ok");
   } else {
     res.render("./partials/permissions");
@@ -175,7 +176,7 @@ routerCarrito.delete("/:carritoId/productos/:productoId", async (req, res) => {
   const { productoId } = req.params;
   const { carritoId } = req.params;
   if (administrador) {
-    const deletCarritos = await carrito.deleteProducts(carritoId, productoId);
+    const deletCarritos = await carrito.deleteProduct(carritoId, productoId);
     res.json("ok");
   } else {
     res.render("./partials/permissions");
