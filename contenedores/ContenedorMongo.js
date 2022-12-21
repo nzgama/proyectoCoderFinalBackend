@@ -19,7 +19,8 @@ class ContenedorMongo {
     try {
       const products = productoSchema
         .findById(id)
-        .then((response) => response)
+        .then((response) => JSON.stringify(response))
+        .then((data) => JSON.parse(data))
         .catch((error) => {
           console.error("Error:", error);
         });
@@ -33,7 +34,8 @@ class ContenedorMongo {
     try {
       const products = productoSchema
         .find()
-        .then((response) => response)
+        .then((response) => JSON.stringify(response))
+        .then((data) => JSON.parse(data))
         .catch((error) => {
           console.error("Error:", error);
         });
@@ -94,10 +96,10 @@ class ContenedorMongo {
     }
   }
 
-  async deleteProducts({ _id: id }) {
+  async deleteProducts(id) {
     try {
       const products = productoSchema
-        .delet(id)
+        .remove({ _id: id })
         .then((response) => response)
         .catch((error) => {
           console.error("Error:", error);
@@ -139,7 +141,8 @@ class ContenedorMongo {
     try {
       const carrito = carritoSchema
         .find()
-        .then((response) => response)
+        .then((response) => JSON.stringify(response))
+        .then((data) => JSON.parse(data))
         .catch((error) => {
           console.error("Error:", error);
         });
