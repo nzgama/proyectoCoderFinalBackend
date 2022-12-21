@@ -7,7 +7,6 @@ Instale las dependencias e inicie el servidor.
 - Cambiar la "INSTANCIA" del archivo .env para utilizar las diferentes formas de almancenamineo.
 ```
 ## Características
-Mensajes
 ```sh
 - Revisar la consola para acceder al local host del proyecto
 - El fronend sera siempre el mismo con las diferentes "INSTANCIA".
