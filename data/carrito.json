@@ -1,8 +1,1 @@
-[
-  {
-    "id": 1,
-    "productos": [{ "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 2 }]
-  },
-  { "id": 2, "productos": [{ "id": 1 }, { "id": 2 }, { "id": 3 }] },
-  { "id": 3, "productos": [{ "id": 1 }, { "id": 2 }] }
-]
+[{"id":2,"productos":[{"id":1},{"id":2},{"id":3}]},{"id":3,"productos":[{"id":1},{"id":2}]}]

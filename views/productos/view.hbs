@@ -3,8 +3,6 @@
 {{#each products}}
     <table style="border: #b2b2b2 1px solid;">
         <caption>Producto: <strong>{{this.nombre}}</strong></caption>
-
-
         <thead>
             <tr>
                 <th><strong>ID</strong></th>
@@ -16,10 +14,13 @@
                 <th><strong>Foto</strong></th>
             </tr>
         </thead>
-
-
         <tr>
+            {{#if this._id}}
+            <td>{{this._id}}</td>
+            {{/if}}
+            {{#if this.id}}
             <td>{{this.id}}</td>
+            {{/if}}
             <td>{{this.codigo}}</td>
             <td> $ {{this.precio}}</td>
             <td>{{this.stock}}</td>

@@ -24,17 +24,31 @@
 
     {{#each products}}
     <tr>
-        <td>{{this.id}}</td>
+        {{#if this._id}}
+            <td>{{this._id}}</td>
+        {{/if}}
+        {{#if this.id}}
+            <td>{{this.id}}</td>
+        {{/if}}
         <td>{{this.nombre}}</td>
         <td>{{this.codigo}}</td>
         <td> $ {{this.precio}}</td>
         <td>{{this.stock}}</td>
         <td>{{this.timestamp}}</td>
         <td>{{this.descripcion}}</td>
-        <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
-        <td><a href="/api/productos/edit/{{this.id}}"><button>Editar</button></a></td>
-        <td><button onclick="eliminar({{this.id}})">Eliminar</button></td>
-        <td><a href="/api/productos/{{this.id}}"><button>Ver</button></a></td>
+        {{#if this._id}}
+            <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
+            <td><a href="/api/productos/edit/{{this._id}}"><button>Editar</button></a></td>
+            <td><button onclick="eliminar('{{this._id}}')">Eliminar</button></td>
+            <td><a href="/api/productos/{{this._id}}"><button>Ver</button></a></td>
+        {{/if}}
+        {{#if this.id}}
+            <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
+            <td><a href="/api/productos/edit/{{this.id}}"><button>Editar</button></a></td>
+            <td><button onclick="eliminar('{{this.id}}')">Eliminar</button></td>
+            <td><a href="/api/productos/{{this.id}}"><button>Ver</button></a></td>
+        {{/if}}
+
     </tr>
     {{/each}}
 </table>
@@ -57,7 +71,6 @@
                 console.error('Error:', error);
             });
     };
-
 
     const editar = (id) => {
         const data = { id: id };

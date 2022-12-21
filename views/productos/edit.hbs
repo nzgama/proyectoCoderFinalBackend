@@ -25,7 +25,12 @@
         <tr>
             <td><input type="number" id="stock" name="stock" required="true" value="{{products.stock}}"></td>
             <td><input type="text" id="foto" name="foto" required="true" value="{{products.foto}}"></td>
-            <td><input type="text" id="id" name="id" required="true" value="{{products.id}}" readonly="true"></td>
+            {{#if products._id}}
+                <td><input type="text" id="id" name="id" required="true" value="{{products._id}}" readonly="true"></td>
+            {{/if}}
+            {{#if products.id}}
+                <td><input type="text" id="id" name="id" required="true" value="{{products.id}}" readonly="true"></td>
+            {{/if}}
         </tr>
         <tr>
 
@@ -40,7 +45,6 @@
 
 <script>
     const editProduct = () => {
-
         const nombre = document.getElementById("nombre").value;
         const codigo = document.getElementById("codigo").value;
         const precio = document.getElementById("precio").value;

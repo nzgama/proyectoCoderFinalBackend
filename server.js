@@ -133,7 +133,7 @@ routerCarrito.get("/edit/:id", async (req, res) => {
   if (administrador) {
     res.render("./carrito/edit", {
       carritos: carritos.productos,
-      id: carritos.id,
+      id: carritos._id,
       products: products,
     });
   } else {
@@ -142,10 +142,9 @@ routerCarrito.get("/edit/:id", async (req, res) => {
 });
 
 routerCarrito.post("/", async (req, res) => {
-  const carritos = await carrito.nuevoCarrito();
-  const last = carritos[carritos.length - 1];
+  await carrito.nuevoCarrito();
   if (administrador) {
-    res.json(last.id + 1);
+    res.json("ok");
   } else {
     res.render("./partials/permissions");
   }
@@ -155,7 +154,7 @@ routerCarrito.post("/:carritoId/productos", async (req, res) => {
   const { id } = req.body;
   const { carritoId } = req.params;
   if (administrador) {
-    const carritos = await carrito.saveProduct(carritoId, id);
+    await carrito.saveProduct(carritoId, id);
     res.json("ok");
   } else {
     res.render("./partials/permissions");
@@ -176,7 +175,7 @@ routerCarrito.delete("/:carritoId/productos/:productoId", async (req, res) => {
   const { productoId } = req.params;
   const { carritoId } = req.params;
   if (administrador) {
-    const deletCarritos = await carrito.deleteProduct(carritoId, productoId);
+    await carrito.deleteProduct(carritoId, productoId);
     res.json("ok");
   } else {
     res.render("./partials/permissions");

@@ -7,7 +7,7 @@
     <caption id="nevoID"></caption>
 
 <div>
-   <button onclick="crearCarrito({{this.id}})">Crear Carrito</button>
+   <button onclick="crearCarrito()">Crear Carrito</button>
 </div>
 
     <thead>
@@ -20,11 +20,20 @@
 
     {{#each carritos}}
     <tr>
-        <td>{{this.id}}</td>
-        <td style="padding-left: 30px;">{{this.productos.length}}</td>
-        <td><a href="/api/carrito/edit/{{this.id}}"><button>Editar</button></a></td>
-        <td><button onclick="eliminar({{this.id}})">Eliminar</button></td>
-        <td><a href="/api/carrito/{{this.id}}/productos"><button>Ver</button></a></td>
+        {{#if this._id}}
+            <td>{{this._id}}</td>
+            <td style="padding-left: 30px;">{{this.productos.length}}</td>
+            <td><a href="/api/carrito/edit/{{this._id}}"><button>Editar</button></a></td>
+            <td><button onclick="eliminar('{{this._id}}')">Eliminar</button></td>
+            <td><a href="/api/carrito/{{this._id}}/productos"><button>Ver</button></a></td>        
+        {{/if}}
+        {{#if this.id}}
+            <td>{{this.id}}</td>
+            <td style="padding-left: 30px;">{{this.productos.length}}</td>
+            <td><a href="/api/carrito/edit/{{this.id}}"><button>Editar</button></a></td>
+            <td><button onclick="eliminar('{{this.id}}')">Eliminar</button></td>
+            <td><a href="/api/carrito/{{this.id}}/productos"><button>Ver</button></a></td>        
+        {{/if}}
     </tr>
     {{/each}}
 </table>
@@ -50,8 +59,6 @@
 
     }
 
-
-
     const eliminar = (id) => {
         const data = { id: id };
         fetch(`/api/carrito/${id}`, {
@@ -69,7 +76,6 @@
                 console.error('Error:', error);
             });
     };
-
 
     const editar = (id) => {
         const data = { id: id };
