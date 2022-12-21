@@ -26,19 +26,11 @@ app.engine(
   })
 );
 
-const ProductosDaoArchvos = require(`./daos/productos/Productos${process.env.INSTANCIA}`);
-const productos = new ProductosDaoArchvos(`${process.env.DATAPRODUCTOS}`);
+const ProductosDao = require(`./daos/productos/Productos${process.env.INSTANCIA}`);
+const productos = new ProductosDao();
 
-const CarritoDaoArchvos = require(`./daos/carritos/Carrito${process.env.INSTANCIA}`);
-const carrito = new CarritoDaoArchvos(`${process.env.DATACARRITO}`);
-
-///
-
-const ProductosDaoMongo = require(`./daos/productos/ProductosDaosMongo.js`);
-const productosMongo = new ProductosDaoMongo(`${process.env.DATAPRODUCTOS}`);
-
-//const carritoSchema = require("./daos/carritos/CarritoDaosMongo.js");
-//const productoSchema = require("./daos/productos/ProductosDaosMongo.js");
+const CarritoDao = require(`./daos/carritos/Carrito${process.env.INSTANCIA}`);
+const carrito = new CarritoDao();
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
@@ -60,7 +52,6 @@ const administrador = true;
 
 routerProductos.get("/", async (req, res) => {
   const products = await productos.getAllProducts();
-  const products2 = await productosMongo.getAllProducts();
   res.render("./productos/index", { products: products });
 });
 
@@ -92,7 +83,7 @@ routerProductos.put("/:id", async (req, res) => {
   if (administrador) {
     const { body } = req;
     const { id } = req.params;
-    const addProductos = await productos.editProducts(id, body);
+    await productos.editProducts(id, body);
     res.json("ok");
   } else {
     res.render("./partials/permissions");
@@ -102,8 +93,7 @@ routerProductos.put("/:id", async (req, res) => {
 routerProductos.post("/", async (req, res) => {
   if (administrador) {
     const { body } = req;
-    const addProductos = await productos.saveProducts(body);
-    const addProductos2 = await productosMongo.saveProducts(body);
+    await productos.saveProducts(body);
     res.json("ok");
   } else {
     res.render("./partials/permissions");

@@ -1,16 +1,12 @@
-const mongoose = require("mongoose");
-const productoSchema = require("../models/productos.js");
-const carritoSchema = require("../models/carritos.js");
+const admin = require("firebase-admin");
 
-const uri =
-  "mongodb+srv://gamal:k7mkUTu7XBAOeWfp@cluster0.6j5lnox.mongodb.net/?retryWrites=true&w=majority";
+const serviceAccount = require("../firebase.json");
 
-mongoose
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("conectado a mongodb"))
-  .catch((e) => console.log("error de conexión", e));
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
-class ContenedorMongo {
+class ContenedorFirebase {
   constructor(coleccion) {
     this.coleccion = coleccion;
   }
@@ -246,4 +242,4 @@ class ContenedorMongo {
   }
 }
 
-module.exports = ContenedorMongo;
+module.exports = ContenedorFirebase;
