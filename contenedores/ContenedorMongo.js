@@ -127,7 +127,8 @@ class ContenedorMongo {
     try {
       const carrito = carritoSchema
         .findById(id)
-        .then((response) => response)
+        .then((response) => JSON.stringify(response))
+        .then((data) => JSON.parse(data))
         .catch((error) => {
           console.error("Error:", error);
         });
@@ -155,18 +156,36 @@ class ContenedorMongo {
   async saveProduct(id, productoId) {
     try {
       const carrito = carritoSchema
-        .updateOne(
-          { _id: id },
-          {
-            $set: {
-              productoId,
-            },
-          }
-        )
-        .then((response) => response)
+        .findById(id)
+        .then((response) => JSON.stringify(response))
+        .then((data) => addProduct(JSON.parse(data)))
         .catch((error) => {
           console.error("Error:", error);
         });
+
+      const addProduct = (data) => {
+        data.productos.push({
+          id: productoId,
+        });
+        update(data.productos);
+      };
+
+      const update = (productos) => {
+        carritoSchema
+          .updateOne(
+            { _id: id },
+            {
+              $set: {
+                productos,
+              },
+            }
+          )
+          .then((response) => response)
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      };
+
       return carrito;
     } catch (error) {
       console.error(error);
@@ -175,74 +194,58 @@ class ContenedorMongo {
 
   async deleteProduct(id, productoId) {
     try {
-      const carritos = fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => data)
+      const carrito = carritoSchema
+        .findById(id)
+        .then((response) => JSON.stringify(response))
+        .then((data) => deleteProduct(JSON.parse(data)))
         .catch((error) => {
           console.error("Error:", error);
         });
 
-      fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => edit(data))
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const deleteProduct = (data) => {
+        const newProduct = [];
 
-      const edit = (data) => {
-        const NewProducts = [];
-        console.log(data);
-        data.forEach((element, key) => {
-          if (element.id == id) {
-            element.productos.forEach((element) => {
-              if (element.id != productoId) {
-                NewProducts.push({ id: element.id });
-              }
-              data[key].productos = NewProducts;
+        data.productos.forEach((element) => {
+          if (element.id != productoId) {
+            newProduct.push({
+              id: element.id,
             });
           }
         });
-        guardarProduct(data);
+        update(newProduct);
       };
 
-      const guardarProduct = (data) => {
-        fs.promises.writeFile(`${this.coleccion}`, `${JSON.stringify(data)}`);
+      const update = (productos) => {
+        carritoSchema
+          .updateOne(
+            { _id: id },
+            {
+              $set: {
+                productos,
+              },
+            }
+          )
+          .then((response) => response)
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       };
-      return carritos;
+
+      return carrito;
     } catch (error) {
-      console.error("Error:", error);
+      console.error(error);
     }
   }
 
   async deleteCarritos(id) {
     try {
-      const carritos = fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => data)
+      const carrito = carritoSchema
+        .remove({ _id: id })
+        .then((response) => response)
         .catch((error) => {
           console.error("Error:", error);
         });
-
-      fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => delet(data))
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      const delet = (data) => {
-        data = data.filter((item) => item.id != id);
-        guardarProduct(data);
-      };
-
-      const guardarProduct = (data) => {
-        fs.promises.writeFile(`${this.coleccion}`, `${JSON.stringify(data)}`);
-      };
-      return carritos;
+      return carrito;
     } catch (error) {
       console.error("Error:", error);
     }
