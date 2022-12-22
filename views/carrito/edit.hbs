@@ -37,7 +37,12 @@
             <td>
                 <select name="select" name="new_id" id="new_id" required="true">
                     {{#each products}}
-                    <option value="{{this._id}}">{{this._id}} - {{this.nombre}}</option>
+                        {{#if this._id}}
+                            <option value="{{this._id}}">{{this._id}} - {{this.nombre}}</option>
+                        {{/if}}
+                        {{#if this.id}}
+                            <option value="{{this.id}}">{{this.id}} - {{this.nombre}}</option>
+                        {{/if}}
                     {{/each}}
                 </select>
             </td>

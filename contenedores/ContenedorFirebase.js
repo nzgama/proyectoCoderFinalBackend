@@ -1,11 +1,12 @@
 const admin = require("firebase-admin");
-
+const { getFirestore } = require("firebase-admin/firestore");
 const serviceAccount = require("../firebase.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+const db = getFirestore();
 class ContenedorFirebase {
   constructor(coleccion) {
     this.coleccion = coleccion;
@@ -13,12 +14,9 @@ class ContenedorFirebase {
 
   async getProducts(id) {
     try {
-      const products = productoSchema
-        .findById(id)
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const res = await db.collection(this.coleccion).doc(id);
+      const resDoc = await res.get();
+      let products = { id: resDoc.id, ...resDoc.data() };
       return products;
     } catch (error) {
       console.error(error);
@@ -27,12 +25,10 @@ class ContenedorFirebase {
 
   async getAllProducts() {
     try {
-      const products = productoSchema
-        .find()
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const res = await db.collection(this.coleccion).get();
+      let products = res.docs.map((item) => {
+        return { id: item.id, ...item.data() };
+      });
       return products;
     } catch (error) {
       console.error(error);
@@ -41,7 +37,7 @@ class ContenedorFirebase {
 
   async saveProducts(body) {
     try {
-      const product = productoSchema({
+      await db.collection(this.coleccion).doc().set({
         nombre: body.nombre,
         codigo: body.codigo,
         stock: body.stock,
@@ -49,7 +45,6 @@ class ContenedorFirebase {
         foto: body.foto,
         descripcion: body.descripcion,
       });
-      product.save();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -57,48 +52,23 @@ class ContenedorFirebase {
 
   async editProducts(id, body) {
     try {
-      const nombre = body.nombre;
-      const codigo = body.codigo;
-      const precio = body.precio;
-      const stock = body.stock;
-      const timestamp = body.timestamp;
-      const foto = body.foto;
-      const descripcion = body.descripcion;
-
-      const products = productoSchema
-        .updateOne(
-          { _id: id },
-          {
-            $set: {
-              nombre,
-              codigo,
-              precio,
-              stock,
-              timestamp,
-              foto,
-              descripcion,
-            },
-          }
-        )
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      return products;
+      const refDoc = await db.collection(this.coleccion).doc(id);
+      await refDoc.update({
+        nombre: body.nombre,
+        codigo: body.codigo,
+        stock: body.stock,
+        timestamp: body.timestamp,
+        foto: body.foto,
+        descripcion: body.descripcion,
+      });
     } catch (error) {
       console.error(error);
     }
   }
 
-  async deleteProducts({ _id: id }) {
+  async deleteProducts(id) {
     try {
-      const products = productoSchema
-        .delet(id)
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      return products;
+      await db.collection(this.coleccion).doc(id).delete();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -108,10 +78,9 @@ class ContenedorFirebase {
 
   async nuevoCarrito() {
     try {
-      const carrito = carritoSchema({
+      await db.collection(this.coleccion).doc().set({
         productos: [],
       });
-      carrito.save();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -119,12 +88,9 @@ class ContenedorFirebase {
 
   async getCarritos(id) {
     try {
-      const carrito = carritoSchema
-        .findById(id)
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const res = await db.collection(this.coleccion).doc(id);
+      const resDoc = await res.get();
+      let carrito = { id: resDoc.id, ...resDoc.data() };
       return carrito;
     } catch (error) {
       console.error(error);
@@ -133,12 +99,10 @@ class ContenedorFirebase {
 
   async getAllCarritos() {
     try {
-      const carrito = carritoSchema
-        .find()
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const res = await db.collection(this.coleccion).get();
+      let carrito = res.docs.map((item) => {
+        return { id: item.id, ...item.data() };
+      });
       return carrito;
     } catch (error) {
       console.error(error);
@@ -147,20 +111,19 @@ class ContenedorFirebase {
 
   async saveProduct(id, productoId) {
     try {
-      const carrito = carritoSchema
-        .updateOne(
-          { _id: id },
-          {
-            $set: {
-              productoId,
-            },
-          }
-        )
-        .then((response) => response)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      return carrito;
+      const res = await db.collection(this.coleccion).doc(id);
+      const resDoc = await res.get();
+      let carrito = { id: resDoc.id, ...resDoc.data() };
+
+      carrito.productos.push({
+        id: productoId,
+      });
+
+      let productos = carrito.productos;
+
+      await res.update({
+        productos,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -168,42 +131,24 @@ class ContenedorFirebase {
 
   async deleteProduct(id, productoId) {
     try {
-      const carritos = fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => data)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const res = await db.collection(this.coleccion).doc(id);
+      const resDoc = await res.get();
+      const productos = [];
+      let carrito = { id: resDoc.id, ...resDoc.data() };
 
-      fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => edit(data))
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      console.log(carrito);
 
-      const edit = (data) => {
-        const NewProducts = [];
-        console.log(data);
-        data.forEach((element, key) => {
-          if (element.id == id) {
-            element.productos.forEach((element) => {
-              if (element.id != productoId) {
-                NewProducts.push({ id: element.id });
-              }
-              data[key].productos = NewProducts;
-            });
-          }
-        });
-        guardarProduct(data);
-      };
+      carrito.productos.forEach((element) => {
+        if (element.id != productoId) {
+          productos.push({
+            id: element.id,
+          });
+        }
+      });
 
-      const guardarProduct = (data) => {
-        fs.promises.writeFile(`${this.coleccion}`, `${JSON.stringify(data)}`);
-      };
-      return carritos;
+      await res.update({
+        productos,
+      });
     } catch (error) {
       console.error("Error:", error);
     }
@@ -211,31 +156,7 @@ class ContenedorFirebase {
 
   async deleteCarritos(id) {
     try {
-      const carritos = fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => data)
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      fs.promises
-        .readFile(`${this.coleccion}`)
-        .then((response) => JSON.parse(response))
-        .then((data) => delet(data))
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      const delet = (data) => {
-        data = data.filter((item) => item.id != id);
-        guardarProduct(data);
-      };
-
-      const guardarProduct = (data) => {
-        fs.promises.writeFile(`${this.coleccion}`, `${JSON.stringify(data)}`);
-      };
-      return carritos;
+      await db.collection(this.coleccion).doc(id).delete();
     } catch (error) {
       console.error("Error:", error);
     }

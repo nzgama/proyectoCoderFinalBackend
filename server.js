@@ -133,7 +133,7 @@ routerCarrito.get("/edit/:id", async (req, res) => {
   if (administrador) {
     res.render("./carrito/edit", {
       carritos: carritos.productos,
-      id: carritos._id,
+      id: id,
       products: products,
     });
   } else {
