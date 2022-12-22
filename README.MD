@@ -8,7 +8,8 @@ Instale las dependencias e inicie el servidor.
 ```
 ## Características
 ```sh
-- Revisar la consola para acceder al local host del proyecto
+- Revisar la consola para acceder al local host del proyecto.
+- Reiniciar el servido cuando se cambie la "INSTANCIA".
 - El fronend sera siempre el mismo con las diferentes "INSTANCIA".
 ```
 
