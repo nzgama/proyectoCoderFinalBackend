@@ -1,0 +1,45 @@
+
+
+
+
+<div class="navbar-wrapper">
+    <div class="container">
+        <h1>Productos random</h1>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">{{app_name}}</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li class=""><a href="/">Home</a></li>
+                        <li><a href="/logout">Cerrar Sesion</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <table style="border: #b2b2b2 1px solid;">
+            <caption>Listado de productos random</caption>
+            <thead>
+                <tr>
+                    <th><strong>Nombre</strong></th>
+                    <th><strong>Precio</strong></th>
+                    <th><strong>Foto</strong></th>
+                </tr>
+            </thead>
+            {{#each products}}
+            <tr>
+                <td>{{this.nombre}}</td>
+                <td>${{this.precio}}</td>
+                <td>{{this.foto}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+</div>
+
+
+

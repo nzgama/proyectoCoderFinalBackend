@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Education</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="custom-container">
+        <div class="jumbotron">
+            <h3 class="text-center text-primary">Login</h3><br>
+            <h3>{{message}}</h3>
+            <form action="/login" id="login" method="POST">
+                <div class="form-group">
+                    <label for="username">Username <span class="text-danger">*</span></label>
+                    <input type="username" class="form-control" name="username" id="username" placeholder="Username" required="true">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Password" required="true">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login" class="btn btn-info btn-block">
+                </div>
+            </form>
+            <a href="/signup">signup</a>
+        </div>
+    </div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    setTimeout(() => {
+        $('.alert').remove();
+    }, 3000)
+</script>
+
+</html>
