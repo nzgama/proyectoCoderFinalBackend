@@ -1,0 +1,91 @@
+{{> navbar}}
+<br />
+
+<table style="border: #b2b2b2 1px solid;">
+    <caption>Listado de productos</caption>
+
+    <div>
+        <a href="/api/productos/add">Agregar Articulo</a>
+    </div>
+
+    <thead>
+        <tr>
+            <th><strong>ID</strong></th>
+            <th><strong>Nombre</strong></th>
+            <th><strong>Código</strong></th>
+            <th><strong>Precio</strong></th>
+            <th><strong>Stock</strong></th>
+            <th><strong>Timestamp</strong></th>
+            <th><strong>Descripcion</strong></th>
+            <th><strong>Foto</strong></th>
+            <th><strong>Acciones</strong></th>
+        </tr>
+    </thead>
+
+    {{#each products}}
+    <tr>
+        {{#if this._id}}
+        <td>{{this._id}}</td>
+        {{/if}}
+        {{#if this.id}}
+        <td>{{this.id}}</td>
+        {{/if}}
+        <td>{{this.nombre}}</td>
+        <td>{{this.codigo}}</td>
+        <td> $ {{this.precio}}</td>
+        <td>{{this.stock}}</td>
+        <td>{{this.timestamp}}</td>
+        <td>{{this.descripcion}}</td>
+        {{#if this._id}}
+        <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
+        <td><a href="/api/productos/edit/{{this._id}}"><button>Editar</button></a></td>
+        <td><button onclick="eliminar('{{this._id}}')">Eliminar</button></td>
+        <td><a href="/api/productos/{{this._id}}"><button>Ver</button></a></td>
+        {{/if}}
+        {{#if this.id}}
+        <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
+        <td><a href="/api/productos/edit/{{this.id}}"><button>Editar</button></a></td>
+        <td><button onclick="eliminar('{{this.id}}')">Eliminar</button></td>
+        <td><a href="/api/productos/{{this.id}}"><button>Ver</button></a></td>
+        {{/if}}
+
+    </tr>
+    {{/each}}
+</table>
+
+<script>
+    const eliminar = (id) => {
+        const data = { id: id };
+        fetch(`/api/productos/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+    const editar = (id) => {
+        const data = { id: id };
+        fetch('/api/productos', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+</script>

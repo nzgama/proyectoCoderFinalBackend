@@ -1,0 +1,20 @@
+{{> navbar}}
+<br />
+<table style="border: #b2b2b2 1px solid;">
+
+    <strong>Carrito ID: <strong>{{id}}</strong></strong><br>
+
+    <strong>Productos</strong>
+
+    <thead>
+        <tr>
+            <th><strong>Productos IDs</strong></th>
+        </tr>
+    </thead>
+    {{#each carritos}}
+    <tr>
+        <td>{{this.id}}</td>
+        <td>{{this.nombre}}</td>
+    </tr>
+    {{/each}}
+</table>

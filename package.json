@@ -5,6 +5,7 @@
     "test": "nodemon benchmark.js"
   },
   "dependencies": {
+    "nodemailer": "^6.9.1",
     "autocannon": "^7.10.0",
     "bcrypt": "^5.0.1",
     "compression": "^1.7.4",

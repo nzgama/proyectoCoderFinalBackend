@@ -1,0 +1,32 @@
+{{> navbar}}
+<br />
+{{#each products}}
+<table style="border: #b2b2b2 1px solid;">
+    <caption>Producto: <strong>{{this.nombre}}</strong></caption>
+    <thead>
+        <tr>
+            <th><strong>ID</strong></th>
+            <th><strong>Código</strong></th>
+            <th><strong>Precio</strong></th>
+            <th><strong>Stock</strong></th>
+            <th><strong>Timestamp</strong></th>
+            <th><strong>Descripcion</strong></th>
+            <th><strong>Foto</strong></th>
+        </tr>
+    </thead>
+    <tr>
+        {{#if this._id}}
+        <td>{{this._id}}</td>
+        {{/if}}
+        {{#if this.id}}
+        <td>{{this.id}}</td>
+        {{/if}}
+        <td>{{this.codigo}}</td>
+        <td> $ {{this.precio}}</td>
+        <td>{{this.stock}}</td>
+        <td>{{this.timestamp}}</td>
+        <td>{{this.descripcion}}</td>
+        <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
+    </tr>
+</table>
+{{/each}}

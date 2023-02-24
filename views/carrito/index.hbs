@@ -1,0 +1,93 @@
+{{> navbar}}
+<br />
+
+<table style="border: #b2b2b2 1px solid;">
+    <caption>Listado de carritos</caption>
+
+    <caption id="nevoID"></caption>
+
+    <div>
+        <button onclick="crearCarrito()">Crear Carrito</button>
+    </div>
+
+    <thead>
+        <tr>
+            <th><strong>Producto ID</strong></th>
+            <th><strong>Cantidad de productos</strong></th>
+            <th><strong>Acciones</strong></th>
+        </tr>
+    </thead>
+
+    {{#each carritos}}
+    <tr>
+        {{#if this._id}}
+        <td>{{this._id}}</td>
+        <td style="padding-left: 30px;">{{this.productos.length}}</td>
+        <td><a href="/api/carrito/edit/{{this._id}}"><button>Editar</button></a></td>
+        <td><button onclick="eliminar('{{this._id}}')">Eliminar</button></td>
+        <td><a href="/api/carrito/{{this._id}}/productos"><button>Ver</button></a></td>
+        {{/if}}
+        {{#if this.id}}
+        <td>{{this.id}}</td>
+        <td style="padding-left: 30px;">{{this.productos.length}}</td>
+        <td><a href="/api/carrito/edit/{{this.id}}"><button>Editar</button></a></td>
+        <td><button onclick="eliminar('{{this.id}}')">Eliminar</button></td>
+        <td><a href="/api/carrito/{{this.id}}/productos"><button>Ver</button></a></td>
+        {{/if}}
+    </tr>
+    {{/each}}
+</table>
+
+<script>
+    const nuevoID = document.getElementById('nevoID');
+    const crearCarrito = () => {
+        fetch('/api/carrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                nuevoID.innerText = `nuevo carrito ID: ${data}`;
+                setTimeout(() => { location.reload(); }, 1500)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+    const eliminar = (id) => {
+        const data = { id: id };
+        fetch(`/api/carrito/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+    const editar = (id) => {
+        const data = { id: id };
+        fetch('/api/productos', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+</script>

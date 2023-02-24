@@ -1,0 +1,82 @@
+{{> navbar}}
+<br />
+
+<h1>Editar Producto</h1>
+
+<strong id="msg"></strong>
+
+<form id="addForm" onsubmit="editProduct(); return false;">
+    <table>
+        <tr>
+            <th><strong>Nombre</strong></th>
+            <th><strong>Código</strong></th>
+            <th><strong>Precio</strong></th>
+        </tr>
+        <tr>
+            <td><input type="text" id="nombre" name="nombre" required="true" value="{{products.nombre}}"></td>
+            <td><input type="number" id="codigo" name="codigo" required="true" value="{{products.codigo}}"></td>
+            <td><input type="number" id="precio" name="precio" required="true" value="{{products.precio}}"></td>
+        </tr>
+        <tr>
+            <th><strong>Stock</strong></th>
+            <th><strong>Foto</strong></th>
+            <th><strong>ID</strong></th>
+        </tr>
+        <tr>
+            <td><input type="number" id="stock" name="stock" required="true" value="{{products.stock}}"></td>
+            <td><input type="text" id="foto" name="foto" required="true" value="{{products.foto}}"></td>
+            {{#if products._id}}
+            <td><input type="text" id="id" name="id" required="true" value="{{products._id}}" readonly="true"></td>
+            {{/if}}
+            {{#if products.id}}
+            <td><input type="text" id="id" name="id" required="true" value="{{products.id}}" readonly="true"></td>
+            {{/if}}
+        </tr>
+        <tr>
+
+        <tr>
+            <textarea name="textarea" id="descripcion" name="descripcion" rows="10" cols="50"
+                required="true">{{products.descripcion}}</textarea>
+        </tr>
+    </table>
+    <input type="submit">
+</form>
+
+
+<script>
+    const editProduct = () => {
+        const nombre = document.getElementById("nombre").value;
+        const codigo = document.getElementById("codigo").value;
+        const precio = document.getElementById("precio").value;
+        const stock = document.getElementById("stock").value;
+        const timestamp = new Date();
+        const foto = document.getElementById("foto").value;
+        const descripcion = document.getElementById("descripcion").value;
+        const id = document.getElementById("id").value;
+        const msg = document.getElementById("msg")
+        const data = {
+            nombre: nombre,
+            codigo: codigo,
+            precio: precio,
+            stock: stock,
+            timestamp: timestamp,
+            foto: foto,
+            descripcion: descripcion,
+            id: id
+        };
+        fetch(`/api/productos/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                msg.innerText = "Se ha guarado con exito";
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+</script>

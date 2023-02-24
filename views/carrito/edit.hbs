@@ -1,0 +1,104 @@
+{{> navbar}}
+<br />
+
+<h1>Editar Carrito ID: {{id}}</h1>
+
+<strong id="msg"></strong><br>
+
+<input style="display: none;" id="carrito_id" type="text" value="{{id}}">
+<table>
+    <strong>Productos</strong>
+
+    <thead>
+        <tr>
+            <th><strong>Producto ID</strong></th>
+            <th><strong>Acciones</strong></th>
+        </tr>
+    </thead>
+    {{#each carritos}}
+    <tr>
+        <td><input type="text" name="id" id="id" value="{{this.id}}" readonly="true"></td>
+        <td><button onclick="borrar('{{this.id}}')">Borrar</button></td>
+    </tr>
+    {{/each}}
+</table>
+
+
+<form id="addForm" onsubmit="addProduct(); return false;">
+    <table>
+        <strong>Agregar Productos</strong>
+
+        <thead>
+            <tr>
+                <th><strong>Producto ID</strong></th>
+            </tr>
+        </thead>
+        <tr>
+            <td>
+                <select name="select" name="new_id" id="new_id" required="true">
+                    {{#each products}}
+                    {{#if this._id}}
+                    <option value="{{this._id}}">{{this._id}} - {{this.nombre}}</option>
+                    {{/if}}
+                    {{#if this.id}}
+                    <option value="{{this.id}}">{{this.id}} - {{this.nombre}}</option>
+                    {{/if}}
+                    {{/each}}
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input type="submit">
+</form>
+
+<script>
+    const addProduct = () => {
+        const id = document.getElementById("new_id").value;
+        const carritoId = document.getElementById("carrito_id").value;
+        const msg = document.getElementById("msg")
+        const data = {
+            id: id,
+            carritoId: carritoId
+        };
+        fetch(`/api/carrito/${carritoId}/productos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                msg.innerText = "Se ha guarado con exito";
+                setTimeout(() => { location.reload(); }, 1500)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    };
+    const borrar = (id) => {
+        const carritoId = document.getElementById("carrito_id").value;
+        const msg = document.getElementById("msg")
+        const data = {
+            id: id,
+            carritoId: carritoId
+        };
+        fetch(`/api/carrito/${carritoId}/productos/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                msg.innerText = "Se ha quitado con exito";
+                setTimeout(() => { location.reload(); }, 1500)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+</script>
