@@ -200,8 +200,8 @@ const mailOptions = {
 };
 
 app.get("/", auth, async (req, res) => {
-  const products = await productos.getAllProducts();
-  res.render("index.hbs", { products: products, username: req.session.user });
+  console.log(req.session);
+  res.render("index.hbs", { username: req.session.user });
 });
 
 app.get("/login", routes.getLogin);
@@ -217,9 +217,10 @@ app.get("/signup", routes.getSignup);
 app.post(
   "/signup",
   passport.authenticate("signup", { failureRedirect: "signup" }),
-  async () => {
+  async (req, res) => {
     await transporter.sendMail(mailOptions);
-    routes.postSignup;
+    logger.log("info", "/signup - POST");
+    res.render("./layouts/login.hbs", { message: "success in registering" });
   }
 );
 
