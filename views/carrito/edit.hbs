@@ -69,7 +69,6 @@
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 msg.innerText = "Se ha guarado con exito";
                 setTimeout(() => { location.reload(); }, 1500)
             })

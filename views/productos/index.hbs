@@ -55,37 +55,17 @@
 
 <script>
     const eliminar = (id) => {
-        const data = { id: id };
         fetch(`/api/productos/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data),
         })
-            .then((response) => response.json())
-            .then((data) => {
-                location.reload();
-            })
+            .then( location.reload())
             .catch((error) => {
                 console.error('Error:', error);
             });
+            
     };
-    const editar = (id) => {
-        const data = { id: id };
-        fetch('/api/productos', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                location.reload();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    };
+  
 </script>

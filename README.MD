@@ -1,13 +1,9 @@
-# Tercera entrega del Proyecto Final
+# Desafíos Coderhouse Programación Backend
+## Desafío "Mejorar la arquitectura de nuestra API" 
 ## Instalación
-Instale las dependencias e inicie el servidor.
-```sh
-- npm i
-- npm run dev
-```
-## Características
-```sh
-- Revisar la consola para acceder al local host del proyecto.
-```
 
-
+Instale las dependencias e inice el servidor.
+```sh
+-Dependencias "npm i"
+-npm run dev
+```

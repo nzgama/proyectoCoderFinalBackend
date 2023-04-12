@@ -1,10 +1,7 @@
-const mongoose = require("mongoose");
+const DAOmongo = require("./DAOS/DAOmongoCarritos.js");
 
-const carritoSchema = mongoose.Schema({
-  productos: {
-    type: [],
-    required: true,
-  },
-});
+let DAO;
 
-module.exports = mongoose.model("Carrito", carritoSchema);
+DAO = new DAOmongo();
+
+module.exports = DAO;

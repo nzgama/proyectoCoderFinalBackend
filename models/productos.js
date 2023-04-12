@@ -1,30 +1,7 @@
-const mongoose = require("mongoose");
+const DAOmongo = require("./DAOS/DAOmongoProductos.js");
 
-const productoSchema = mongoose.Schema({
-  nombre: {
-    type: String,
-    required: true,
-  },
-  codigo: {
-    type: String,
-    required: true,
-  },
-  stock: {
-    type: Number,
-    required: true,
-  },
-  timestamp: {
-    type: String,
-    required: true,
-  },
-  foto: {
-    type: String,
-    required: true,
-  },
-  descripcion: {
-    type: String,
-    required: true,
-  },
-});
+let DAO;
 
-module.exports = mongoose.model("Producto", productoSchema);
+DAO = new DAOmongo();
+
+module.exports = DAO;

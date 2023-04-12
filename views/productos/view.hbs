@@ -1,6 +1,5 @@
 {{> navbar}}
 <br />
-{{#each products}}
 <table style="border: #b2b2b2 1px solid;">
     <caption>Producto: <strong>{{this.nombre}}</strong></caption>
     <thead>
@@ -15,18 +14,17 @@
         </tr>
     </thead>
     <tr>
-        {{#if this._id}}
-        <td>{{this._id}}</td>
+        {{#if products._id}}
+        <td>{{products._id}}</td>
         {{/if}}
-        {{#if this.id}}
-        <td>{{this.id}}</td>
+        {{#if products.id}}
+        <td>{{products.id}}</td>
         {{/if}}
-        <td>{{this.codigo}}</td>
-        <td> $ {{this.precio}}</td>
-        <td>{{this.stock}}</td>
-        <td>{{this.timestamp}}</td>
-        <td>{{this.descripcion}}</td>
-        <td><img src="{{this.foto}}" class="product-img" width="100" height="100" /></td>
+        <td>{{products.codigo}}</td>
+        <td> $ {{products.precio}}</td>
+        <td>{{products.stock}}</td>
+        <td>{{products.timestamp}}</td>
+        <td>{{products.descripcion}}</td>
+        <td><img src="{{products.foto}}" class="product-img" width="100" height="100" /></td>
     </tr>
 </table>
-{{/each}}
