@@ -1,7 +1,5 @@
-# Desafíos Coderhouse Programación Backend
-## Desafío "Mejorar la arquitectura de nuestra API" 
+# Proyecto final - Coderhouse Programación Backend
 ## Instalación
-
 Instale las dependencias e inice el servidor.
 ```sh
 -Dependencias "npm i"
