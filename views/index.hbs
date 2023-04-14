@@ -1,58 +1,23 @@
-<div class="navbar-wrapper">
-    <div class="container">
-        <h1>Hola {{username}} Bienvenido !!</h1>
-        <div class="navbar">
-            <div class="navbar-inner">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <a class="brand" href="/">{{app_name}}</a>
-                <div class="nav-collapse collapse">
-                    {{> navbar}}
-                </div>
-            </div>
-        </div>
+{{> navbar}}
+
+<br>
+
+<div class="row">
+    <div class="col-2 p-5">
+        <h3>Chat</h3>
+        <p>Envie sus mensajes.</p>
+        <form onsubmit="enviarMsg();return false;">
+            <input id="input-email" placeholder="E-mail" required="true" value="{{username}}" readonly />
+            <textarea class="mt-1" required="true" id="input-msg" placeholder="Mensaje" cols="30" rows="10"></textarea>
+            <input class="mt-1" type="submit" value="ENVIAR!" />
+        </form>
     </div>
+    <div class="col-8 p-5">
+        <div id="div-list-msgs"></div>
+    </div>
+
 </div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="./index.js"></script>
-<script>
-    const eliminar = (id) => {
-        const data = { id: id };
-        fetch(`/api/productos/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                location.reload();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    };
-
-    const editar = (id) => {
-        const data = { id: id };
-        fetch('/api/productos', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                location.reload();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    };
-</script>

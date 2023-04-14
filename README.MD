@@ -5,3 +5,6 @@ Instale las dependencias e inice el servidor.
 -Dependencias "npm i"
 -npm run dev
 ```
+
+admin@admin.com
+admin

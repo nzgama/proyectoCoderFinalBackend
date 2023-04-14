@@ -3,29 +3,16 @@ const MongoStore = require("connect-mongo");
 const { engine } = require("express-handlebars");
 const express = require("express");
 const session = require("express-session");
-const { connect } = require("mongoose");
-const yargs = require("yargs/yargs")(process.argv.slice(2));
-const args = yargs.default({ port: 8080 }).argv;
 const app = express();
 
 const routerProductos = require("./rutas/productos.js");
 const routerCarrito = require("./rutas/carrito.js");
 const routerUsers = require("./rutas/users.js");
 
+require("./connection.js");
 require("dotenv").config();
 
 app.use(compression());
-
-const connectMG = async () => {
-  try {
-    await connect(`${process.env.CONECCIONDB}`);
-  } catch (error) {
-    console.error(error);
-    throw "can not connect to the bd";
-  }
-};
-
-connectMG();
 
 app.use(
   session({
@@ -42,8 +29,18 @@ app.use(
   })
 );
 
-const port = process.env.PORT || args.port;
+const port = process.env.PORT;
 const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer);
+const msgs = [
+  {
+    socketid: "",
+    email: "Creador",
+    mensaje:
+      "Bienvendo al proyecto, pedes ecribir en este chat pero nadie te repondera (:",
+    fecha: "El origen de los timpos.",
+  },
+];
 
 httpServer.listen(port, () =>
   console.log(`Example app listening on port http://localhost:${port}`)
@@ -68,3 +65,17 @@ app.engine(
 app.use("/api/productos", routerProductos);
 app.use("/api/carrito", routerCarrito);
 app.use("/", routerUsers);
+
+//CHAT - MEMORIA
+io.on("connection", (socket) => {
+  socket.on("msg", async (data) => {
+    const now = new Date();
+    msgs.push({
+      socketid: socket.id,
+      email: data.email,
+      mensaje: data.mensaje,
+      fecha: `${now.toUTCString()}`,
+    });
+    io.sockets.emit("msg-list", msgs);
+  });
+});

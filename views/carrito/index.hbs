@@ -1,42 +1,47 @@
 {{> navbar}}
+
 <br />
 
-<table style="border: #b2b2b2 1px solid;">
-    <caption>Listado de carritos</caption>
+<div class="row">
+    <div class="col-10 p-5">
+        <table style="border: #b2b2b2 1px solid;">
+            <caption>Listado de carritos</caption>
 
-    <caption id="nevoID"></caption>
+            <caption id="nevoID"></caption>
 
+            <div>
+                <button onclick="crearCarrito()">Crear Carrito</button>
+            </div>
+
+            <thead>
+                <tr>
+                    <th><strong>Producto ID</strong></th>
+                    <th><strong>Cantidad de productos</strong></th>
+                    <th><strong>Acciones</strong></th>
+                </tr>
+            </thead>
+
+            {{#each carritos}}
+            <tr>
+                {{#if this._id}}
+                <td>{{this._id}}</td>
+                <td style="padding-left: 30px;">{{this.productos.length}}</td>
+                <td><a href="/api/carrito/edit/{{this._id}}"><button>Editar</button></a></td>
+                <td><button onclick="eliminar('{{this._id}}')">Eliminar</button></td>
+                <td><a href="/api/carrito/{{this._id}}/productos"><button>Ver</button></a></td>
+                {{/if}}
+                {{#if this.id}}
+                <td>{{this.id}}</td>
+                <td style="padding-left: 30px;">{{this.productos.length}}</td>
+                <td><a href="/api/carrito/edit/{{this.id}}"><button>Editar</button></a></td>
+                <td><button onclick="eliminar('{{this.id}}')">Eliminar</button></td>
+                <td><a href="/api/carrito/{{this.id}}/productos"><button>Ver</button></a></td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </table>
     <div>
-        <button onclick="crearCarrito()">Crear Carrito</button>
-    </div>
-
-    <thead>
-        <tr>
-            <th><strong>Producto ID</strong></th>
-            <th><strong>Cantidad de productos</strong></th>
-            <th><strong>Acciones</strong></th>
-        </tr>
-    </thead>
-
-    {{#each carritos}}
-    <tr>
-        {{#if this._id}}
-        <td>{{this._id}}</td>
-        <td style="padding-left: 30px;">{{this.productos.length}}</td>
-        <td><a href="/api/carrito/edit/{{this._id}}"><button>Editar</button></a></td>
-        <td><button onclick="eliminar('{{this._id}}')">Eliminar</button></td>
-        <td><a href="/api/carrito/{{this._id}}/productos"><button>Ver</button></a></td>
-        {{/if}}
-        {{#if this.id}}
-        <td>{{this.id}}</td>
-        <td style="padding-left: 30px;">{{this.productos.length}}</td>
-        <td><a href="/api/carrito/edit/{{this.id}}"><button>Editar</button></a></td>
-        <td><button onclick="eliminar('{{this.id}}')">Eliminar</button></td>
-        <td><a href="/api/carrito/{{this.id}}/productos"><button>Ver</button></a></td>
-        {{/if}}
-    </tr>
-    {{/each}}
-</table>
+<div>
 
 <script>
     const nuevoID = document.getElementById('nevoID');
