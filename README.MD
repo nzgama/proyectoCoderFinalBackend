@@ -1,8 +1,8 @@
 # Proyecto final - Coderhouse Programación Backend
 ## Instalación
-Instale las dependencias e inice el servidor.
+Instale las dependencias.
 ```sh
-- "npm i"
+npm i
 ```
 ## Base de datos
 ```sh
@@ -15,7 +15,7 @@ El proyecto cuenta con un frontend bastante simple creado con handlebars y boots
 ## Despliegues
 ### Nube
 ```sh
-El proyecto cuenta con un despliegue en "producción" realizado en railway https://proyectocoderfinalbackend-production.up.railway.app/. 
+El proyecto cuenta con un despliegue en "producción" realizado en railway (https://proyectocoderfinalbackend-production.up.railway.app/). 
 ```
 ### Local
 ```sh
