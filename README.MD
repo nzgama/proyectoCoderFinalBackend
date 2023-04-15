@@ -15,9 +15,9 @@
  
 ### Local
  - Una vez instaladas las dependencias podemos desplegar de forma local el proyecto.
- > npm run dev (modo developer)
- > npm run test (modo test)
- > npm run start (modo produccion)
+ > npm run dev (modo developer).
+ > npm run test (modo test).
+ > npm run start (modo produccion).
  - Una vez desplegado vamos a ver por consola el puerto en el que se encuentra desplegado el proyecto.
 
 ## Usuario y contrasña para pruebas 
