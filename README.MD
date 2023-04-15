@@ -1,9 +1,8 @@
 # Proyecto final - Coderhouse Programación Backend
 ## Instalación
-Instale las dependencias.
-```sh
-npm i
-```
+ - Instale las dependencias.
+ > npm i
+
 ## Base de datos
 ```sh
 El proyecto cuenta con una base de datos desplegada en la nube (MongoDB Atlas Database) a 
@@ -18,7 +17,7 @@ permitirá probar todos los endpoints como por ejemplo crear carritos, productos
 ### Nube
 ```sh
 El proyecto cuenta con un despliegue en "producción" realizado en railway.
-LINK: https://proyectocoderfinalbackend-production.up.railway.app/
+LINK: (https://proyectocoderfinalbackend-production.up.railway.app)
 ```
 ### Local
 ```sh
