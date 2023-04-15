@@ -7,7 +7,7 @@
  - El proyecto cuenta con una base de datos desplegada en la nube (MongoDB Atlas Database) a la cual se conecta por defecto.
 
 ## Frontend
- - El proyecto cuenta con un frontend bastante simple creado con handlebars y bootstrap 5 que nos permitirá probar todos los endpoints como por ejemplo crear carritos, y eliminarlos.
+ - El proyecto cuenta con un frontend bastante simple creado con handlebars y bootstrap 5 que nos permitirá probar todos los endpoints como por ejemplo crear carritos, productos, etc... y eliminarlos.
 
 ## Despliegues
 ### Nube
