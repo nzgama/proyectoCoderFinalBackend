@@ -5,9 +5,9 @@ const express = require("express");
 const session = require("express-session");
 const app = express();
 
-const routerProductos = require("./rutas/productos.js");
-const routerCarrito = require("./rutas/carrito.js");
-const routerUsers = require("./rutas/users.js");
+const routerProductos = require("./routes/productos.js");
+const routerCarrito = require("./routes/carrito.js");
+const routerUsers = require("./routes/users.js");
 
 require("./connection.js");
 require("dotenv").config();
@@ -29,7 +29,6 @@ app.use(
   })
 );
 
-const port = process.env.PORT;
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer);
 const msgs = [
@@ -42,8 +41,10 @@ const msgs = [
   },
 ];
 
-httpServer.listen(port, () =>
-  console.log(`Example app listening on port http://localhost:${port}`)
+httpServer.listen(process.env.PORT, () =>
+  console.log(
+    `Example app listening on port http://localhost:${process.env.PORT}`
+  )
 );
 
 //HBS
@@ -62,6 +63,7 @@ app.engine(
   })
 );
 
+//RUTAS
 app.use("/api/productos", routerProductos);
 app.use("/api/carrito", routerCarrito);
 app.use("/", routerUsers);
